@@ -1,4 +1,6 @@
 from room import Room
+from player import Player
+import textwrap
 
 # Declare all the rooms
 
@@ -39,6 +41,9 @@ room['treasure'].s_to = room['narrow']
 
 # Make a new player object that is currently in the 'outside' room.
 
+player = Player("Sigi", "outside")
+
+
 # Write a loop that:
 #
 # * Prints the current room name
@@ -49,3 +54,32 @@ room['treasure'].s_to = room['narrow']
 # Print an error message if the movement isn't allowed.
 #
 # If the user enters "q", quit the game.
+selection = ""
+
+while selection != "q":
+    directions = {
+    "n": room[player.current_room].n_to,
+    "s": room[player.current_room].s_to,
+    "e": room[player.current_room].e_to,
+    "w": room[player.current_room].w_to
+    }
+
+    print(f"Current Location: {player.current_room}")
+    print(textwrap.wrap(room[player.current_room].description))
+
+    selection = input("Please select a direction to move. ")
+    # next_room = room[player.current_room].[selection]
+
+    try:
+        next_room = directions[selection]
+        if next_room != "":
+            print(f"You've moved to {next_room.name}")
+            if next_room.name.split()[0] == "Grand":
+                player.current_room = next_room.name.split()[1].lower()
+            else:
+                player.current_room = next_room.name.split()[0].lower()
+        else:
+            print("There is no room in that direction.")
+
+    except ValueError:
+        print("Please enter a direction.")
